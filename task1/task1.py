@@ -1,8 +1,7 @@
-import sys
 import argparse
 
 
-def calc_path(n, m):
+def calc_path(n: int, m: int) -> int:
     result = ''
     last_node = 0
     while True:
