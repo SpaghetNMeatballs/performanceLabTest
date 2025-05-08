@@ -35,7 +35,7 @@ def read_circle_data(f: TextIO) -> Circle:
     except ValueError:
         print("ERROR! Invalid radius!")
         exit(1)
-    return Circle(x=float(x), y=float(x), r=float(radius))
+    return Circle(x=x, y=y, r=radius)
 
 
 def read_points(f: TextIO) -> Generator[None, Point, None]:
@@ -45,7 +45,7 @@ def read_points(f: TextIO) -> Generator[None, Point, None]:
         except ValueError:
             print(f"ERROR! Invalid point data: {point}")
             exit(1)
-        yield Point(x=float(x), y=float(y))
+        yield Point(x=x, y=y)
 
 
 def check_point(point: Point, circle: Circle) -> Placement:
