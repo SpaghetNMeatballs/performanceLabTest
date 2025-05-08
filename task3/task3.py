@@ -2,7 +2,7 @@ import argparse
 import json
 
 
-def recursive_fill(inp_json, values):
+def recursive_fill(inp_json, values) -> None:
     if "tests" in inp_json:
         for test in inp_json["tests"]:
             recursive_fill(test, values)

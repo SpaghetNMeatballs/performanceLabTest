@@ -13,7 +13,7 @@ def process_list_file(list_file: TextIO) -> list:
     return to_equalise
 
 
-def equalise_list(inp: list):
+def equalise_list(inp: list) -> list:
     m = sorted(inp)[len(inp) // 2]
     result = 0
     for i in inp:
