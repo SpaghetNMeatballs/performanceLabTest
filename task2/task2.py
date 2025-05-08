@@ -69,7 +69,6 @@ def main() -> None:
     )
     args = parser.parse_args()
     circle = read_circle_data(args.circle)
-    print(circle)
     for point in read_points(args.points):
         print(check_point(circle=circle, point=point))
 
