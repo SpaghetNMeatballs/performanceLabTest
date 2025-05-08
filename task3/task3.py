@@ -18,17 +18,17 @@ def recursive_fill(inp_json, values):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "values_path", type=argparse.FileType("r"), help="values file"
+        "values_file", type=argparse.FileType("r"), help="values file"
     )
     parser.add_argument(
-        "tests_path", type=argparse.FileType("r"), help="test file"
+        "tests_file", type=argparse.FileType("r"), help="test file"
     )
     parser.add_argument(
-        "report_path", type=argparse.FileType("w"), help="report file"
+        "report_file", type=argparse.FileType("w"), help="report file"
     )
     args = parser.parse_args()
-    values = json.load(args.values_path)
-    tests = json.load(args.tests_path)
+    values = json.load(args.values_file)
+    tests = json.load(args.tests_file)
     recursive_fill(tests, values)
-    json.dump(tests, args.report_path, ensure_ascii=False, indent=4)
+    json.dump(tests, args.report_file, ensure_ascii=False, indent=4)
 
