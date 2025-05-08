@@ -1,32 +1,78 @@
-import sys
-import os
+import argparse
+import math
+from dataclasses import dataclass
+from enum import IntEnum
+from typing import Generator, TextIO
 
-if __name__ == '__main__':
-    assert len(sys.argv) == 3, "Wrong amount of arguments passed"
-    circle_path = sys.argv[1] if os.path.exists(sys.argv[1]) else os.getcwd()+'\\'+sys.argv[1]
-    points_path = sys.argv[2] if os.path.exists(sys.argv[2]) else os.getcwd()+'\\'+sys.argv[2]
-    if os.path.exists(circle_path):
+
+class Placement(IntEnum):
+    INSIDE = 1
+    BORDER = 0
+    OUTSIDE = 2
+
+
+@dataclass
+class Circle:
+    x: float
+    y: float
+    r: float
+
+
+@dataclass
+class Point:
+    x: float
+    y: float
+
+
+def read_circle_data(f: TextIO) -> Circle:
+    try:
+        x, y = (float(i) for i in f.readline().split(" "))
+    except ValueError:
+        print("ERROR! Invalid circle center coordinates!")
+        exit(1)
+    try:
+        radius = float(f.readline())
+    except ValueError:
+        print("ERROR! Invalid radius!")
+        exit(1)
+    return Circle(x=float(x), y=float(x), r=float(radius))
+
+
+def read_points(f: TextIO) -> Generator[None, Point, None]:
+    while point := f.readline():
         try:
-            with open(circle_path, 'r') as circle:
-                x, y = [int(i) for i in circle.readline().split()]
-                radius = int(circle.readline())
-        except TypeError:
-            raise Exception("Wrong file structure")
-    else:
-        raise FileNotFoundError("File containing circle data not found")
-    if os.path.exists(points_path):
-        try:
-            with open(points_path, 'r') as points:
-                for point in points:
-                    x1, y1 = [int(i) for i in point.split()]
-                    result = (x - x1) ** 2 + (y - y1) ** 2
-                    if result < radius ** 2:
-                        print(1)
-                    elif result == radius ** 2:
-                        print(0)
-                    else:
-                        print(2)
-        except TypeError:
-            raise Exception("Wrong file structure")
-    else:
-        raise FileNotFoundError("File containing points data not found")
+            x, y = (float(i) for i in point.split(" "))
+        except ValueError:
+            print(f"ERROR! Invalid point data: {point}")
+            exit(1)
+        yield Point(x=float(x), y=float(y))
+
+
+def check_point(point: Point, circle: Circle) -> Placement:
+    x = point.x - circle.x
+    y = point.y - circle.y
+    distance = math.sqrt(x * x + y * y)
+    if math.isclose(circle.r, distance):
+        return Placement.BORDER
+    if circle.r > distance:
+        return Placement.INSIDE
+    return Placement.OUTSIDE
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "circle", type=argparse.FileType("r"), help="circle coordinates"
+    )
+    parser.add_argument(
+        "points", type=argparse.FileType("r"), help="points coordinates"
+    )
+    args = parser.parse_args()
+    circle = read_circle_data(args.circle)
+    print(circle)
+    for point in read_points(args.points):
+        print(check_point(circle=circle, point=point))
+
+
+if __name__ == "__main__":
+    main()
