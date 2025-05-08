@@ -38,14 +38,16 @@ def read_circle_data(f: TextIO) -> Circle:
     return Circle(x=x, y=y, r=radius)
 
 
-def read_points(f: TextIO) -> Generator[None, Point, None]:
-    while point := f.readline():
+def read_points(f: TextIO) -> list:
+    result = []
+    for row in f:
         try:
-            x, y = (float(i) for i in point.split(" "))
+            x, y = (float(i) for i in row.split())
         except ValueError:
-            print(f"ERROR! Invalid point data: {point}")
+            print("ERROR! Invalid point coordinates")
             exit(1)
-        yield Point(x=x, y=y)
+        result.append(Point(x, y))
+    return result
 
 
 def check_point(point: Point, circle: Circle) -> Placement:

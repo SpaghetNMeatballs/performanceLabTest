@@ -2,7 +2,7 @@ import argparse
 
 
 def calc_path(n: int, m: int) -> int:
-    result = ''
+    result = ""
     last_node = 0
     while True:
         result += str(last_node + 1)
@@ -13,14 +13,10 @@ def calc_path(n: int, m: int) -> int:
     return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "n", type=int, help="List length"
-    )
-    parser.add_argument(
-        "m", type=int, help="Cycle length"
-    )
+    parser.add_argument("n", type=int, help="List length")
+    parser.add_argument("m", type=int, help="Cycle length")
     args = parser.parse_args()
     n, m = args.n, args.m
     print(calc_path(n, m))
