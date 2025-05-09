@@ -2,7 +2,7 @@ import argparse
 import math
 from dataclasses import dataclass
 from enum import IntEnum
-from typing import Generator, TextIO
+from typing import TextIO
 
 
 class Placement(IntEnum):
