@@ -2,12 +2,11 @@ import argparse
 import json
 
 
-def process_values(values_json:dict)->dict:
+def process_values(values_json: dict) -> dict:
     result = {}
     for value in values_json["values"]:
         result[value["id"]] = value["value"]
     return result
-
 
 
 def recursive_fill(inp_json: dict, values: dict) -> None:
@@ -18,7 +17,7 @@ def recursive_fill(inp_json: dict, values: dict) -> None:
         for value in inp_json["values"]:
             recursive_fill(value, values)
 
-    if "value" in inp_json:
+    if "id" in inp_json and inp_json["id"] in values:
         inp_json["value"] = values[inp_json["id"]]
 
 
