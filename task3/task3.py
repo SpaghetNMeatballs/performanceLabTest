@@ -2,7 +2,15 @@ import argparse
 import json
 
 
-def recursive_fill(inp_json, values) -> None:
+def process_values(values_json:dict)->dict:
+    result = {}
+    for value in values_json["values"]:
+        result[value["id"]] = value["value"]
+    return result
+
+
+
+def recursive_fill(inp_json: dict, values: dict) -> None:
     if "tests" in inp_json:
         for test in inp_json["tests"]:
             recursive_fill(test, values)
@@ -11,9 +19,7 @@ def recursive_fill(inp_json, values) -> None:
             recursive_fill(value, values)
 
     if "value" in inp_json:
-        for value_case in values["values"]:
-            if value_case["id"] == inp_json["id"]:
-                inp_json["value"] = value_case["value"]
+        inp_json["value"] = values[inp_json["id"]]
 
 
 if __name__ == "__main__":
@@ -24,5 +30,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     values = json.load(args.values_file)
     tests = json.load(args.tests_file)
-    recursive_fill(tests, values)
+    recursive_fill(tests, process_values(values))
     json.dump(tests, args.report_file, ensure_ascii=False, indent=4)
